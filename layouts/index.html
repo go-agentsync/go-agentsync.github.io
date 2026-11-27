@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ .Site.Title }} — see the agents working on your machine</title>
+<meta name="description" content="go-agentsync coordinates many Claude Code sessions on one machine, and agentscope shows them live: sessions, sub-agents, repositories and messages.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+{{ partial "styles.html" . }}
+{{ partial "btn-try-style.html" . }}
+</head>
+<body class="lm">
+  <header class="nav"><div class="wrap">
+    <a class="brand" href="/"><img class="glyph" src="/img/logo.svg" width="32" height="32" alt="go-agentsync logo"> go-agentsync</a>
+    <nav><a href="#agentscope">agentscope</a><a href="#releases">Releases</a><a href="#eco">Repositories</a></nav>
+    {{ partial "theme-toggle.html" . }}
+  </div></header>
+  {{ partial "fork-ribbon.html" "https://github.com/go-agentsync/agentscope" }}
+
+  <div class="hero"><div class="wrap">
+    <div>
+      <h1 class="head">Many agents,<br><span class="accent">one clear view.</span></h1>
+      <p class="sub"><b>About 25 sessions at once is hard to follow from a list of leases.</b> agentsync coordinates them; agentscope draws them: which sessions and sub-agents exist, what task each has, which repository each holds, and the messages between them.</p>
+      {{/* [[params.cta]] in hugo.toml: the kit renders the row */}}
+      {{ partial "cta.html" . }}
+      <div class="trust"><span><b>read-only</b>, nothing leaves the machine</span><span>serves <code>127.0.0.1</code> only</span></div>
+    </div>
+    <div class="term">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">agentscope — zsh</span></div>
+{{/* The two commands are the ones the agentscope README gives (Use section,
+     v0.13.2); the output line is the README's own address. */}}
+<pre><span class="c-com"># install, then open the live view</span>
+<span class="c-cmd">$</span> go install github.com/go-agentsync/agentscope/cmd/agentscope@latest
+<span class="c-cmd">$</span> agentscope serve
+<span class="c-out">http://127.0.0.1:8765/</span></pre>
+    </div>
+  </div></div>
+
+  <div class="strip"><div class="wrap">
+    {{/* DERIVED from the list in hugo.toml, never typed beside it. */}}
+    <span class="lead-line">{{ len .Site.Params.modules }} repositories — <b>coordinate sessions, then watch them</b></span>
+    <div class="mods">{{ range .Site.Params.modules }}<a href="https://github.com/go-agentsync/{{ .name }}">{{ .name }}</a>{{ end }}</div>
+  </div></div>
+
+  <section id="agentscope"><div class="wrap">
+    <span class="eyebrow">agentscope</span>
+    <h2>A graph of your agent network, <i>live</i>.</h2>
+    <div class="grid">
+      <div class="card"><h3>What it is</h3><p>A graph of session clusters beside a repositories cluster, a sessions table and a detail pane, plus quota and guardrail tabs. It reads session metadata only, never a prompt or a response.</p></div>
+      <div class="card"><h3>Install</h3><p><code>go install github.com/go-agentsync/agentscope/cmd/agentscope@latest</code></p></div>
+      <div class="card"><h3>Run</h3><p><code>agentscope serve</code>, then open <code>http://127.0.0.1:8765/</code>. It binds a loopback address and refuses any other. <code>agentscope snapshot</code> prints one snapshot in the terminal.</p></div>
+    </div>
+  </div></section>
+
+  <section id="releases" style="padding-top:10px"><div class="wrap">
+    <span class="eyebrow">Releases</span>
+    <h2>What changed <i>lately</i>.</h2>
+    <div class="grid">
+      {{ range .Site.Params.releases }}
+      <div class="card"><h3><a href="https://github.com/go-agentsync/agentscope/releases/tag/{{ .tag }}"><code>agentscope</code></a> <span class="tag active">{{ .tag }}</span></h3><p>{{ .what }}</p></div>
+      {{ end }}
+    </div>
+  </div></section>
+
+  <section id="eco" style="padding-top:10px"><div class="wrap">
+    <span class="eyebrow">Repositories</span>
+    <h2>The <i>tools</i>.</h2>
+    <div class="grid">
+      {{ range .Site.Params.modules }}
+      <div class="card"><h3><a href="https://github.com/go-agentsync/{{ .name }}"><code>{{ .name }}</code></a> <span class="tag active">{{ .tag }}</span></h3><p>{{ .blurb | markdownify }}</p></div>
+      {{ end }}
+    </div>
+  </div></section>
+
+  <footer><div class="wrap"><span>© the go-agentsync authors</span><span>no frameworks</span>{{ partial "kit-version.html" . }}</div></footer>
+</body>
+</html>
