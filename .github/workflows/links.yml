@@ -1,0 +1,54 @@
+name: links
+
+# A dead link on a landing page breaks nothing that complains, so every link
+# and image the built page carries is fetched on each pull request.
+#
+# ⛔ THE CHECK READS THE BUILT SITE, NOT THE LAYOUTS. The first version of this
+# file grepped layouts/ and failed on its own first run against
+# `https://github.com/go-widgets/{{ .name }}` -- a Hugo template expression,
+# not a URL. Skipping anything with a brace in it would have "fixed" that and
+# left the per-repository card links unchecked, which is most of the page's
+# links. Building first expands them into the URLs a reader actually gets,
+# which is the only set worth checking.
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    name: every link and image resolves
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      # Hugo resolves the landingkit module (hugo.toml [module]) with the go
+      # command, at the version go.mod pins.
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: false
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "0.170.1"
+          extended: true
+      - run: hugo --minify --destination ./public
+      - name: Check
+        # linkcheck (go-fleettools/fleettools, pinned): retries with backoff,
+        # github.com links decided through the REST API (the HTML pages answer
+        # 504 to a runner under load), DEAD (exit 1) vs FLAKY (exit 2). It
+        # already skips img.shields.io. The job's read-only github.token is
+        # passed as a 0600 file in RUNNER_TEMP, never in env or argv.
+        run: |
+          umask 077
+          token="${RUNNER_TEMP}/linkcheck-token"
+          trap 'rm -f "${token}"' EXIT
+          printf '%s' '${{ github.token }}' > "${token}"
+          go run github.com/go-fleettools/fleettools/cmd/linkcheck@v0.74.0 \
+            --token-file "${token}" \
+            public/
