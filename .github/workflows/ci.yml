@@ -26,7 +26,7 @@ jobs:
           extended: true
       - name: Record the agentscope demo
         run: |
-          GOBIN="$PWD/bin" go install github.com/go-agentsync/agentscope/cmd/agentscope@v0.14.1
+          GOBIN="$PWD/bin" go install github.com/go-agentsync/agentscope/cmd/agentscope@v0.14.2
           # capture refuses to write inside a work tree, so record elsewhere and copy
           ./bin/agentscope capture --scenario theme-lang --out "$RUNNER_TEMP/agentscope-demo.svg"
           cp "$RUNNER_TEMP/agentscope-demo.svg" static/img/agentscope-demo.svg
