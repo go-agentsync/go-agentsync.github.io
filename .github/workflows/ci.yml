@@ -26,10 +26,12 @@ jobs:
           extended: true
       - name: Record the agentscope demo
         run: |
-          GOBIN="$PWD/bin" go install github.com/go-agentsync/agentscope/cmd/agentscope@v0.14.2
+          GOBIN="$PWD/bin" go install github.com/go-agentsync/agentscope/cmd/agentscope@v0.15.0
           # capture refuses to write inside a work tree, so record elsewhere and copy
           ./bin/agentscope capture --scenario theme-lang --out "$RUNNER_TEMP/agentscope-demo.svg"
           cp "$RUNNER_TEMP/agentscope-demo.svg" static/img/agentscope-demo.svg
+          ./bin/agentscope capture --scenario theme-lang --out "$RUNNER_TEMP/agentscope-demo.webm"
+          cp "$RUNNER_TEMP/agentscope-demo.webm" static/img/agentscope-demo.webm
       - run: hugo --minify
       - name: the demo is on the page and in the output
         run: |
@@ -37,6 +39,10 @@ jobs:
             || { echo "::error::the demo is not on the page"; exit 1; }
           test -s public/img/agentscope-demo.svg \
             || { echo "::error::the demo was not published"; exit 1; }
+          grep -q 'img/agentscope-demo.webm' public/index.html \
+            || { echo "::error::the WebM link is not on the page"; exit 1; }
+          test -s public/img/agentscope-demo.webm \
+            || { echo "::error::the WebM demo was not published"; exit 1; }
       # A page that builds and says nothing is a page nobody notices is empty.
       # The list below is typed here on purpose, apart from hugo.toml: a check
       # that read the page's own data would agree with the page whatever it

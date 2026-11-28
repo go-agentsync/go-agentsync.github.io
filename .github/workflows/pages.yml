@@ -52,10 +52,12 @@ jobs:
       # the tree. Keep the version in step with hugo.toml's agentscope tag.
       - name: Record the agentscope demo
         run: |
-          GOBIN="$PWD/bin" go install github.com/go-agentsync/agentscope/cmd/agentscope@v0.14.2
+          GOBIN="$PWD/bin" go install github.com/go-agentsync/agentscope/cmd/agentscope@v0.15.0
           # capture refuses to write inside a work tree, so record elsewhere and copy
           ./bin/agentscope capture --scenario theme-lang --out "$RUNNER_TEMP/agentscope-demo.svg"
           cp "$RUNNER_TEMP/agentscope-demo.svg" static/img/agentscope-demo.svg
+          ./bin/agentscope capture --scenario theme-lang --out "$RUNNER_TEMP/agentscope-demo.webm"
+          cp "$RUNNER_TEMP/agentscope-demo.webm" static/img/agentscope-demo.webm
 
       - name: Build with Hugo
         run: hugo --minify --gc
