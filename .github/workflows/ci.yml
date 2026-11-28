@@ -24,7 +24,17 @@ jobs:
         with:
           hugo-version: "0.170.1"
           extended: true
+      - name: Record the agentscope demo
+        run: |
+          GOBIN="$PWD/bin" go install github.com/go-agentsync/agentscope/cmd/agentscope@v0.14.1
+          ./bin/agentscope capture --scenario theme-lang --out static/img/agentscope-demo.svg
       - run: hugo --minify
+      - name: the demo is on the page and in the output
+        run: |
+          grep -q 'img/agentscope-demo.svg' public/index.html \
+            || { echo "::error::the demo is not on the page"; exit 1; }
+          test -s public/img/agentscope-demo.svg \
+            || { echo "::error::the demo was not published"; exit 1; }
       # A page that builds and says nothing is a page nobody notices is empty.
       # The list below is typed here on purpose, apart from hugo.toml: a check
       # that read the page's own data would agree with the page whatever it

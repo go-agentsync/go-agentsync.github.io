@@ -48,6 +48,13 @@ jobs:
 
       - uses: actions/configure-pages@v6
 
+      # The demo on the page is recorded by the released agentscope, not kept in
+      # the tree. Keep the version in step with hugo.toml's agentscope tag.
+      - name: Record the agentscope demo
+        run: |
+          GOBIN="$PWD/bin" go install github.com/go-agentsync/agentscope/cmd/agentscope@v0.14.1
+          ./bin/agentscope capture --scenario theme-lang --out static/img/agentscope-demo.svg
+
       - name: Build with Hugo
         run: hugo --minify --gc
 
