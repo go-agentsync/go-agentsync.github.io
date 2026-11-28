@@ -10,4 +10,5 @@
 # The agentscope demo is recorded at build time by `agentscope capture` (3.4 MiB
 # of vector frames), never committed.
 /static/img/agentscope-demo.svg
+/static/img/agentscope-demo.webm
 /bin/

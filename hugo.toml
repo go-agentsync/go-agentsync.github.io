@@ -38,7 +38,7 @@ disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404"]
 # repository's own tag list is the authority and the card links there.
 [[params.modules]]
   name = "agentscope"
-  tag = "v0.14.2"
+  tag = "v0.15.0"
   blurb = "A live graphical view of the Claude Code agent network on this machine: sessions, sub-agents, tasks, repositories and the messages between them. Read-only, loopback only."
 [[params.modules]]
   name = "agentsync"
@@ -47,6 +47,9 @@ disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404"]
 
 # What changed in agentscope, newest first. One line each; the detail is in the
 # release notes the card links to.
+[[params.releases]]
+  tag = "v0.15.0"
+  what = "agentscope capture --format webm records the demo as a WebM video, for the platforms that take video only."
 [[params.releases]]
   tag = "v0.14.2"
   what = "The capture demo is 8 to 16 times smaller (glyphs drawn once, then reused); a nil message is refused, not a crash."
