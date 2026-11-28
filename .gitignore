@@ -6,3 +6,8 @@
 # so PR diffs stay signal-only.
 /public/
 .hugo_build.lock
+
+# The agentscope demo is recorded at build time by `agentscope capture` (3.4 MiB
+# of vector frames), never committed.
+/static/img/agentscope-demo.svg
+/bin/
